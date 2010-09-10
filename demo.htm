@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+	<meta name="author" content="Jesse Baird">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+  
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css" type="text/css" />
+   <link rel="stylesheet" href="jquery.jb.shortscroll.css" />
+  
+  
+  <script type="text/javascript" src="jquery.jb.shortscroll.js"></script>
+  <script type="text/javascript" src="mousewheel.js"></script>
+
+	<title>widget test</title>
+    
+    <style type="text/css">
+    .ui-icon-triangle-1-s {
+        background-position:-65px -16px;
+    }
+
+        .wrapper{
+            height: 401px;
+            width: 650px;
+            margin: 0px auto;
+            border: 1px solid black;
+        }
+
+        .content{
+            width: 100%;
+            height:100%
+        }
+    </style>
+    
+</head>
+
+<body>
+<h1>ShortScroll demo</h1>
+<p>a custom scroll bar by Jesse Baird http://jebaird.com/blog/shortscroll-jquery-ui-google-wave-style-scroll-bar</p>
+<div class="wrapper">
+
+
+<div class="content">
+
+<center>
+<h1>A Simple Sample Web Page</h1>
+<img src="http://sheldonbrown.com/images/scb_eagle_contact.jpeg">
+<h4>By Sheldon Brown</h4>
+<h2>Demonstrating a few HTML features</h2>
+</center>
+
+
+HTML is really a very simple language.  It consists of ordinary text, with commands that are enclosed by "&lt;" and "&gt;" characters, or bewteen an "&amp;" and a ";". <p>
+You don't really need to know much HTML to create a page, because you can copy bits of HTML from other pages that do what you want, then change the text!</p><p>
+This page shows on the left as it appears in your browser, and the corresponding HTML code appears on the right.  The HTML commands are linked to explanations of what they do.
+</p><h3>Line Breaks</h3>
+HTML doesn't normally use line breaks for ordinary text.  A white space of any size is treated as a single space.  This is because the author of the page has no way of knowing the size of the reader's screen, or what size type they will have their browser set for.<p>
+If you want to put a line break at a particular place, you can use the "&lt;BR&gt;" command, or, for a paragraph break, the "&lt;P&gt;" command, which will insert a blank line.  The heading command ("&lt;H4&gt;&lt;/H4&gt;") puts a blank line above and below the heading text.
+</p><h4>Starting and Stopping Commands</h4>
+Most HTML commands come in pairs: for example, "&lt;H4&gt;" marks the beginning of a size 4 heading, and "&lt;/H4&gt;" marks the end of it.  The closing command is always the same as the opening command, except for the addition of the "/".<p>
+Modifiers are sometimes  included along with the basic command, inside the opening command's &lt; &gt;.  The modifier does not need to be repeated in the closing command.
+</p><h1>This is a size "1" heading</h1>
+<h2>This is a size "2" heading</h2>
+<h3>This is a size "3" heading</h3>
+<h4>This is a size "4" heading</h4>
+<h5>This is a size "5" heading</h5>
+<h6>This is a size "6" heading</h6>
+<center>
+<h4>Copyright © 1997, by <a href="http://sheldonbrown.com/index.html">Sheldon Brown</a></h4>
+
+If you would like to make a link or bookmark to this page, the URL is:<br>
+http://sheldonbrown.com/web_sample1.html
+
+</center>
+<hr />
+
+<center>
+<h1>A Simple Sample Web Page</h1>
+<img src="http://sheldonbrown.com/images/scb_eagle_contact.jpeg">
+<h4>By Sheldon Brown</h4>
+<h2>Demonstrating a few HTML features</h2>
+</center>
+
+
+HTML is really a very simple language.  It consists of ordinary text, with commands that are enclosed by "&lt;" and "&gt;" characters, or bewteen an "&amp;" and a ";". <p>
+You don't really need to know much HTML to create a page, because you can copy bits of HTML from other pages that do what you want, then change the text!</p><p>
+This page shows on the left as it appears in your browser, and the corresponding HTML code appears on the right.  The HTML commands are linked to explanations of what they do.
+</p>
+
+<h3>Line Breaks</h3>
+HTML doesn't normally use line breaks for ordinary text.  A white space of any size is treated as a single space.  This is because the author of the page has no way of knowing the size of the reader's screen, or what size type they will have their browser set for.<p>
+If you want to put a line break at a particular place, you can use the "&lt;BR&gt;" command, or, for a paragraph break, the "&lt;P&gt;" command, which will insert a blank line.  The heading command ("&lt;H4&gt;&lt;/H4&gt;") puts a blank line above and below the heading text.
+</p><h4>Starting and Stopping Commands</h4>
+Most HTML commands come in pairs: for example, "&lt;H4&gt;" marks the beginning of a size 4 heading, and "&lt;/H4&gt;" marks the end of it.  The closing command is always the same as the opening command, except for the addition of the "/".<p>
+Modifiers are sometimes  included along with the basic command, inside the opening command's &lt; &gt;.  The modifier does not need to be repeated in the closing command.
+</p><h1>This is a size "1" heading</h1>
+<h2>This is a size "2" heading</h2>
+<h3>This is a size "3" heading</h3>
+<h4>This is a size "4" heading</h4>
+<h5>This is a size "5" heading</h5>
+<h6>This is a size "6" heading</h6>
+<center>
+<h4>Copyright © 1997, by <a href="http://sheldonbrown.com/index.html">Sheldon Brown</a></h4>
+
+If you would like to make a link or bookmark to this page, the URL is:<br>
+http://sheldonbrown.com/web_sample1.html
+
+</center>
+
+</div>
+
+</div>
+
+
+
+</div>
+<script type="text/javascript">
+    
+    $().ready(function(){
+       $('.content').shortscroll();
+	});
+</script>
+</body>
+</html>
