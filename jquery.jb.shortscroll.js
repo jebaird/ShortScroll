@@ -1,5 +1,5 @@
 /*
- * jQuery ShortScroll UI Widget 1
+ * ShortScroll - jQuery UI Widget 
  * Copyright (c) 2010 Jesse Baird
  *
  * http://jebaird.com/blog/shortscroll-jquery-ui-google-wave-style-scroll-bar
@@ -32,14 +32,14 @@
     
         handler: function(event) {
            // console.log(event);
-            var elem = this, 
-            $elem = $(elem), 
-            viewPort=$elem.innerHeight(),
+            var elem = this,
             scrollHeight = this.scrollHeight,
             scrollTop = this.scrollTop,
+            $elem = $(elem), 
+            viewPort = $elem.innerHeight(),
+            $marker = $elem.data('jb-shortscroll-marker');
             
-            $marker=$elem.data('jb-shortscroll-marker');
-            markerIncrament=Math.ceil(scrollTop/(((scrollHeight-viewPort)/(viewPort/2-$marker.outerHeight()))));
+            markerIncrament=Math.ceil(scrollTop /(((scrollHeight-viewPort)/(viewPort/2-$marker.outerHeight()))));
             $marker.css('top',markerIncrament);
             event.type = "jbShortscrollUpdateMarker";
             // let jQuery handle the triggering of "tripleclick" event handlers
@@ -54,8 +54,7 @@
     $.widget("jb.shortscroll", {
 		options: {
 			scrollSpeed: 100,
-			animationSpeed: 150,
-            _viewPort:0
+			animationSpeed: 150
 		},
 				
 		_create: function() {
@@ -66,7 +65,7 @@
                 
                 wrapper = $('<div class="jb-shortscroll-wrapper"><div class="jb-shortscroll-track"><div class="jb-shortscroll-scrollbar"><div class="jb-shortscroll-scrollbar-btn-up jb-shortscroll-scrollbar-btn ui-corner-top" data-dir="up"><span class="ui-icon ui-icon-triangle-1-n"></span></div><div class="jb-shortscroll-scrollbar-middle"></div><div class="jb-shortscroll-scrollbar-btn-down jb-shortscroll-scrollbar-btn ui-corner-bottom" data-dir="down"><span class="ui-icon ui-icon-triangle-1-s"></span></div></div></div><div class="jb-shortscroll-marker ui-corner-all"></div><div class="jb-shortscroll-stopper ui-corner-all"></div></div>').insertAfter(el);
                 
-            self.options._viewPort = el.innerHeight();
+            self._viewPort = el.innerHeight();
             
             el
             .attr('tabindex','0')
@@ -79,7 +78,7 @@
                     vel = (dir=='Up')?-Math.abs(delta):Math.abs(delta);
                     this.scrollTop=+this.scrollTop+vel*o.scrollSpeed;
                     //make the target act like it has a navtive scroll bar
-                    if(this.scrollTop!=0&&dir=='Up'||this.scrollTop+o._viewPort!=this.scrollHeight&&dir=='Down'){
+                    if( this.scrollTop != 0 && dir == 'Up' || this.scrollTop +self._viewPort != this.scrollHeight && dir=='Down' ){
                         //console.log('up false');
                         return false;
                     }
@@ -96,7 +95,7 @@
             })
             .bind('click',function(e){
                 el.animate({
-                    'scrollTop':'+='+(($(this).attr('data-dir')=='up')?-o._viewPort:o._viewPort)
+                    'scrollTop':'+='+(($(this).attr('data-dir')=='up')?-self._viewPort:self._viewPort)
                 },o.animationSpeed);
             })
             .end()
@@ -107,6 +106,7 @@
                 cancel:'.jb-shortscroll-scrollbar-btn',
                 cursor:'move',
                 start: function(e,ui){
+                	//TODO: figure out a way to tirgger this so its now so slow
                     //only trigger if bar and scroll top are faruther apart
        //            el
 //                   .stop()
@@ -122,7 +122,7 @@
             });
             
             $(window).bind('resize',function(){
-                self.options._viewPort = el.innerHeight();
+                self._viewPort = el.innerHeight();
                 self._positionWrapper(wrapper);
             });
                
@@ -143,7 +143,7 @@
             get the ratic of pixs to the target to scroll track
         */
         _pixelRatio: function(element){
-            return Math.ceil((((this.element[0].scrollHeight-this.options._viewPort)/(this.options._viewPort/2-element.outerHeight()))));
+            return Math.ceil((((this.element[0].scrollHeight-this._viewPort)/(this._viewPort/2-element.outerHeight()))));
         },
         _positionWrapper: function(wrapper){
             
@@ -152,7 +152,7 @@
                 position:'absolute',
                 top:0,
                 left:0,
-                height:this.options._viewPort/2
+                height:this._viewPort/2
             })
             .position({
                 of:this.element,
