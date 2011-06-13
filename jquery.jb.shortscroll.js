@@ -42,7 +42,7 @@
             markerIncrament=Math.ceil(scrollTop /(((scrollHeight-viewPort)/(viewPort/2-$marker.outerHeight()))));
             $marker.css('top',markerIncrament);
             event.type = "jbShortscrollUpdateMarker";
-            // let jQuery handle the triggering of "tripleclick" event handlers
+           
             jQuery.event.handle.apply(this, arguments)
     
         }
