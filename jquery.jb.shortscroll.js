@@ -6,14 +6,20 @@
  *
  * Depends:
  *   - jQuery 1.4
- *   - jQuery UI 1.8 (core, widget factory)
+ *   - jQuery UI 1.8 (core, widget factory, draggable)
  *   - jQuery mousewheel plugin - Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- *  
+ *  ######### change log ###########
+ * 	Jesse Baird
+ * 	7/1/2011
+ * 	switched up the markup. 
+ * 		now the scroll bar elements get appended to the target and the target cotnent gets wrapped. 
+ * 		This solves the issue of the scroll bar element sticking around after the target has been hidden
+ * 	
  *
  *
 */
@@ -38,7 +44,7 @@
             $elem = $(elem), 
             viewPort = $elem.innerHeight(),
             $marker = $elem.data('jb-shortscroll-marker');
-            
+            console.log($marker)
             markerIncrament=Math.ceil(scrollTop /(((scrollHeight-viewPort)/(viewPort/2-$marker.outerHeight()))));
             $marker.css('top',markerIncrament);
             event.type = "jbShortscrollUpdateMarker";
@@ -61,18 +67,41 @@
 			
 			var self = this,
 				o = self.options,
-				el = self.element,
+				el = self.element;
                 
-                wrapper = $('<div class="jb-shortscroll-wrapper"><div class="jb-shortscroll-track"><div class="jb-shortscroll-scrollbar"><div class="jb-shortscroll-scrollbar-btn-up jb-shortscroll-scrollbar-btn ui-corner-top" data-dir="up"><span class="ui-icon ui-icon-triangle-1-n"></span></div><div class="jb-shortscroll-scrollbar-middle"></div><div class="jb-shortscroll-scrollbar-btn-down jb-shortscroll-scrollbar-btn ui-corner-bottom" data-dir="down"><span class="ui-icon ui-icon-triangle-1-s"></span></div></div></div><div class="jb-shortscroll-marker ui-corner-all"></div><div class="jb-shortscroll-stopper ui-corner-all"></div></div>').insertAfter(el);
+                //TODO: wrap all of the childen with another div, so we can have the scroll track inside the target
+                //el.children().wrap('<div/>')
+                self.content = el.wrapInner('<div class="jb-shortscroll-content">').children('.jb-shortscroll-content');
+             //   console.log( self.content );
+                //TODO: change wrpper to scroll element
+                self.wrapper = $(
+                	'<div class="jb-shortscroll-wrapper">' + 
+                		'<div class="jb-shortscroll-track">' + 
+                			'<div class="jb-shortscroll-scrollbar">' + 
+                				'<div class="jb-shortscroll-scrollbar-btn-up jb-shortscroll-scrollbar-btn ui-corner-top" data-dir="up">' + 
+                					'<span class="ui-icon ui-icon-triangle-1-n"></span>' + 
+                				'</div>' + 
+                				'<div class="jb-shortscroll-scrollbar-middle"></div>' + 
+                				'<div class="jb-shortscroll-scrollbar-btn-down jb-shortscroll-scrollbar-btn ui-corner-bottom" data-dir="down">' + 
+                					'<span class="ui-icon ui-icon-triangle-1-s"></span>' + 
+                				'</div>' + 
+                			'</div>' + 
+                		'</div>'+ 
+                		'<div class="jb-shortscroll-marker ui-corner-all"></div>' + 
+                		'<div class="jb-shortscroll-stopper ui-corner-all"></div>' + 
+                	'</div>'
+                ).appendTo(el);
                 
             self._viewPort = el.innerHeight();
             
-            el
-            .attr('tabindex','0')
-            .addClass('jb-shortscroll-target')
-            .data('jb-shortscroll-marker',wrapper.find('div.jb-shortscroll-marker'))
+            console.log( self.wrapper.find('.jb-shortscroll-marker') )
+            
+            el.addClass('jb-shortscroll-target')
+            self.content
+            .data('jb-shortscroll-marker',self.wrapper.find('.jb-shortscroll-marker'))
+            //.attr('tabindex','0')
             .bind({
-                'jbShortscrollUpdateMarker.jbss':$.noop,
+                'jbShortscrollUpdateMarker.jbss': $.noop,
                 'mousewheel.jbss':function(event,delta){
                     var dir = delta > 0 ? 'Up' : 'Down',
                     vel = (dir=='Up')?-Math.abs(delta):Math.abs(delta);
@@ -85,18 +114,22 @@
                         
                 }
             });
-
-            self._positionWrapper(wrapper);
             
-            wrapper
+            //console.log( el.data('jb-shortscroll-marker'))
+            self._positionWrapper();
+            
+            self.wrapper
             .find('div.jb-shortscroll-scrollbar-btn')
             .hover(function(e){
                 $(this).toggleClass('ui-state-hover')
             })
             .bind('click',function(e){
-                el.animate({
+            	
+                self.content.animate({
                     'scrollTop':'+='+(($(this).attr('data-dir')=='up')?-self._viewPort:self._viewPort)
-                },o.animationSpeed);
+                	},
+                	o.animationSpeed
+                );
             })
             .end()
             .find('div.jb-shortscroll-scrollbar')
@@ -116,51 +149,56 @@
                 },
                 drag: function(e,ui) {
                     var $this = $(this);
+                   // console.log( $this, self.content[0])
                     markerIncrament=self._pixelRatio($this);
-                    el[0].scrollTop=markerIncrament*ui.position.top;
+                    //console.log(markerIncrament, $this.outerHeight())
+                    
+                    self.content[0].scrollTop=markerIncrament*ui.position.top;
                }
-            });
-            
-            $(window).bind('resize',function(){
-                self._viewPort = el.innerHeight();
-                self._positionWrapper(wrapper);
             });
                
 		},
 				
-		destroy: function() {			
-			this.element.next().remove();
+		destroy: function() {
+			//TODO: fix this up to work with new api and markup			
+			this.wrapper.remove()
             this.element.unbind('jbShortscrollUpdateMarker.jbss mousewheel.jbss');
 			//remove wrapper and mouse wheel events
 			$(window).unbind("resize");
 		},
-		
+		scrollTo: function( e ){
+			if( typeof e == 'number'){
+				//set scroll top to the % of the height
+			}else if( true ){
+				//scroll to element
+			}
+			
+		},
 		_setOption: function(option, value) {
 			$.Widget.prototype._setOption.apply( this, arguments );
            
 		},
         /*
-            get the ratic of pixs to the target to scroll track
+            get the ratio of pxs to the target to scroll track
         */
         _pixelRatio: function(element){
-            return Math.ceil((((this.element[0].scrollHeight-this._viewPort)/(this._viewPort/2-element.outerHeight()))));
+        	
+            return Math.ceil(
+            	(
+            		(( this.content[0].scrollHeight - this._viewPort ) / ( this._viewPort / 2 - element.outerHeight() ))
+            	)
+            );
         },
-        _positionWrapper: function(wrapper){
+        _positionWrapper: function(){
             
-            wrapper
+            this.wrapper
             .css({
-                position:'absolute',
-                top:0,
-                left:0,
-                height:this._viewPort/2
+                // position:'absolute',
+                // top:0,
+                // left:0,
+                height: this._viewPort/2
             })
-            .position({
-                of:this.element,
-                my:'left top',
-                at:'right top',
-                offset:'-8 0',
-                collision:'none'               
-            })
+ 
         }
         
 	});
