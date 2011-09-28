@@ -39,13 +39,13 @@
         handler: function(event) {
            // console.log(event);
             var elem = this,
-            scrollHeight = this.scrollHeight,
-            scrollTop = this.scrollTop,
-            $elem = $(elem), 
-            viewPort = $elem.innerHeight(),
-            $marker = $elem.data('jb-shortscroll-marker');
-            console.log($marker)
-            markerIncrament=Math.ceil(scrollTop /(((scrollHeight-viewPort)/(viewPort/2-$marker.outerHeight()))));
+            	scrollHeight = this.scrollHeight,
+            	scrollTop = this.scrollTop,
+            	$elem = $(elem), 
+            	viewPort = $elem.innerHeight(),
+            	$marker = $elem.data('jb-shortscroll-marker'),
+            	markerIncrament = Math.ceil(scrollTop /(((scrollHeight-viewPort)/(viewPort/2-$marker.outerHeight()))));
+            
             $marker.css('top',markerIncrament);
             event.type = "jbShortscrollUpdateMarker";
            
